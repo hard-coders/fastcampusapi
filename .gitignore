@@ -1,0 +1,29 @@
+# IDE
+.idea/
+.vscode/
+
+# virtual environments
+env/
+venv/
+
+# 강의를 위한 임시 main.py
+main.py
+
+# python
+**/__pycache__/
+*.pyc
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
