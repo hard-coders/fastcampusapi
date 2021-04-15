@@ -24,4 +24,4 @@ def get_users_grade(grade: UserLevel = UserLevel.a):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run(app)
