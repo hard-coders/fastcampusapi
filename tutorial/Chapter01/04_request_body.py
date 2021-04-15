@@ -9,7 +9,6 @@ from pydantic import BaseModel, HttpUrl
 app = FastAPI()
 
 
-# 추가: Item 클래스
 class Item(BaseModel):
     name: str
     price: float
@@ -20,7 +19,7 @@ class User(BaseModel):
     name: str
     password: str
     avatar_url: Optional[HttpUrl] = None
-    inventory: List[Item] = []  # 추가: inventory
+    inventory: List[Item] = []
 
 
 @app.post("/users")
