@@ -1,3 +1,5 @@
+#!/bin/sh
+
 docker run -d --name fastapi-db \
     -p 3306:3306 \
     -e MYSQL_ROOT_PASSWORD=1234 \
