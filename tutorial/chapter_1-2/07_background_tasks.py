@@ -5,7 +5,7 @@ source from: https://fastapi.tiangolo.com/tutorial/background-tasks
 import time
 
 from typing import Optional
-from fastapi import BackgroundTasks, Depends, FastAPI
+from fastapi import BackgroundTasks, Depends, FastAPI, status
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ def get_query(background_tasks: BackgroundTasks, q: Optional[str] = None):
     return q
 
 
-@app.post("/send-notification/{email}")
+@app.post("/send-notification/{email}", status_code=status.HTTP_202_ACCEPTED)
 async def send_notification(
     email: str, background_tasks: BackgroundTasks, q: str = Depends(get_query)
 ):
