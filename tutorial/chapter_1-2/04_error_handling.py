@@ -1,3 +1,5 @@
+from typing import Any, Optional, Dict
+
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 
@@ -9,6 +11,18 @@ class SomeError(Exception):
 
     def __str__(self):
         return f"<{self.name}> is occured. code: <{self.code}>"
+
+
+class SomeFastAPIError(HTTPException):
+    def __init__(
+        self,
+        status_code: int,
+        detail: Any = None,
+        headers: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        super().__init__(
+            status_code=status_code, detail=detail, headers=headers
+        )
 
 
 app = FastAPI()
@@ -33,7 +47,7 @@ async def get_user(user_id: int):
     if user_id not in users.keys():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User <{user_id}> is not exists.",
+            detail=f"<User: {user_id}> is not exists.",
         )
     return users[user_id]
 
