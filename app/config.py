@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     DB_PORT: str
     DB_NAME: str
 
+    TELEGRAM_BOT_TOKEN: SecretStr
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
