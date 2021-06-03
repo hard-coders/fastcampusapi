@@ -3,13 +3,12 @@ from pydantic import HttpUrl
 
 from app import models
 from app.config import settings
-from lib import schema
-from lib.telegram import Telegram
+from app.lib import telegram
 from devtools import debug
 
 
 app = FastAPI()
-telegram = Telegram(settings.TELEGRAM_BOT_TOKEN)
+bot = telegram.Telegram(settings.TELEGRAM_BOT_TOKEN)
 
 
 @app.on_event("startup")
@@ -27,21 +26,21 @@ async def hello():
 @app.post("/")
 async def webhook(request: Request):
     r = await request.json()
-    r = schema.Update.parse_obj(r)
+    r = telegram.schema.Update.parse_obj(r)
     debug(r)
     return 'OK'
 
 
 @app.get("/me")
 async def get_me():
-    return await telegram.get_bot_info()
+    return await bot.get_bot_info()
 
 
 @app.get("/wb")
 async def get_webhook():
-    return await telegram.get_webhook()
+    return await bot.get_webhook()
 
 
 @app.post("/wb")
 async def set_webhook(url: HttpUrl = Body(..., embed=True)):
-    return await telegram.set_webhook(url)
+    return await bot.set_webhook(url)
