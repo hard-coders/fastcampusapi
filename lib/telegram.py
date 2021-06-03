@@ -25,3 +25,11 @@ class Telegram:
         """Get current bot info"""
         r = await self.client.get("getMe")
         return r.json()
+
+    async def get_webhook(self):
+        r = await self.client.get("getWebhookInfo")
+        return r.json()
+
+    async def set_webhook(self, url: str):
+        r = await self.client.post("setWebhook", data={"url": url})
+        return r.json()
