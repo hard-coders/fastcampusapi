@@ -3,11 +3,9 @@
 .vscode/
 
 # virtual environments
+.env
 env/
 venv/
-
-# 강의를 위한 임시 main.py
-main.py
 
 # python
 **/__pycache__/
