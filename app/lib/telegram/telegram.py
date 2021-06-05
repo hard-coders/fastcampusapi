@@ -33,3 +33,7 @@ class Telegram:
     async def set_webhook(self, url: str):
         r = await self.client.post("setWebhook", data={"url": url})
         return r.json()
+
+    async def send_message(self, chat_id: int, text: str):
+        r = await self.client.post("sendMessage", data={"chat_id": chat_id, "text": text})
+        return r.json()
