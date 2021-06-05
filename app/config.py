@@ -34,7 +34,7 @@ class TestSettings(BaseSettings):
 
 @lru_cache
 def get_settings():
-    if os.environ["APP_ENV"].lower() == "test":
+    if os.getenv("APP_ENV", "dev").lower() == "test":
         return TestSettings()
     return Settings()
 

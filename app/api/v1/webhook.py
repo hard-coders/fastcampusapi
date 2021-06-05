@@ -36,18 +36,24 @@ async def set_webhook(url: HttpUrl = Body(..., embed=True)):
 
 @router.post(f"/{settings.TELEGRAM_BOT_TOKEN.get_secret_value()}")
 async def webhook(request: Request, db: Session = Depends(get_db)):
-    resp = await request.json()
-    update = telegram.schema.Update.parse_obj(resp)
+    req = await request.json()
+    print(req)
+    update = telegram.schemas.Update.parse_obj(req)
     message = update.message
     user = update.message.from_
 
     db_user = db.query(models.User).filter_by(id=user.id).first()
     if not db_user:
-        add_user(user, db)
+        db_user = add_user(user, db)
 
     msg = "✨ '문제' 또는 '퀴즈'라고 말씀하시면 문제를 냅니다!"
     if "문제" in message.text or "퀴즈" in message.text:
         quiz = db.query(models.Quiz).order_by(func.RAND()).first()
+
+        if not quiz:
+            await bot.send_message(message.chat.id, "퀴즈가 없습니다")
+            return
+
         db_user.quiz_id = quiz.id
         msg = f"{quiz.question}\n\n{quiz.content}"
     elif db_user.quiz_id and message.text.isnumeric():

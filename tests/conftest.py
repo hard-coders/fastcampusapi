@@ -59,3 +59,55 @@ def add_quiz(session):
         return r
 
     return func
+
+
+@pytest.fixture(autouse=True)
+async def mock_telegram(monkeypatch):
+    from app.lib.telegram import Telegram
+
+    async def mock_get_bot_info(*args, **kwargs):
+        ...
+
+    async def mock_get_webhook(*args, **kwargs):
+        return {
+            "ok": True,
+            "result": {
+                "has_custom_certificate": False,
+                "ip_address": "127.0.0.1",
+                "last_error_date": 1622887352,
+                "last_error_message": "Wrong response from the webhook: 500 Internal Server Error",
+                "max_connections": 40,
+                "pending_update_count": 0,
+                "url": "https://localhost/v1/webhook/sometoken",
+            },
+        }
+
+    async def mock_set_webhook(*args, **kwargs):
+        return {"ok": True, "result": True, "description": "Webhook is already set"}
+
+    async def mock_send_message(*args, **kwargs):
+        return {
+            "message_id": 1234,
+            "from": {
+                "id": 123,
+                "is_bot": False,
+                "first_name": "first",
+                "last_name": "last",
+                "username": "username",
+                "language_code": "ko",
+            },
+            "chat": {
+                "id": 123,
+                "type": "private",
+                "first_name": "first",
+                "last_name": "last",
+                "username": "username",
+            },
+            "datetime": 1622902229,
+            "text": "some text",
+        }
+
+    monkeypatch.setattr(Telegram, "get_bot_info", mock_get_bot_info)
+    monkeypatch.setattr(Telegram, "get_webhook", mock_get_webhook)
+    monkeypatch.setattr(Telegram, "set_webhook", mock_set_webhook)
+    monkeypatch.setattr(Telegram, "send_message", mock_send_message)

@@ -1,2 +1,2 @@
-from . import schema  # noqa
+from . import schemas  # noqa
 from .telegram import Telegram  # noqa
