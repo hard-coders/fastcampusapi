@@ -1,0 +1,4 @@
+[run]
+omit =
+    app/lib/*
+    app/config.py

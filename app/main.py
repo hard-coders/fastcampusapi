@@ -14,14 +14,6 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
-def on_startup():
-    from app import models
-    from app.database import engine
-
-    models.Base.metadata.create_all(bind=engine)
-
-
 @app.get("/")
 async def healthcheck():
     return {"ok": True}
