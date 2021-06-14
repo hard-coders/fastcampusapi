@@ -3,6 +3,7 @@
 .vscode/
 
 # virtual environments
+prod.env
 .env
 env/
 venv/

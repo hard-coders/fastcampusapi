@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -12,7 +14,8 @@ engine = create_engine(
         host=settings.DB_HOST,
         port=settings.DB_PORT,
         name=settings.DB_NAME,
-    )
+    ),
+    connect_args={"ssl": {"ca": "/app/ca.pem"}} if os.getenv("APP_ENV") == "prod" else {},
 )
 SessionLocal = sessionmaker(
     bind=engine,

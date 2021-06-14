@@ -35,5 +35,6 @@ tutorial_app
 venv/
 insert_quizzes.sql
 pytest.ini
+prod.env
 README.md
 requirements-dev.txt
