@@ -1,0 +1,55 @@
+name: TEST
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: 1234
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: 1234
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+      # MySQL 서비스 될 때까지 대기
+      - name: MySQL health check
+        env:
+          PORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+
+      # 파이썬 설정
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      # 디펜더시 설치
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      # 테스트
+      - name: Test Code
+        env:
+          TESTING: true
+          TELEGRAM_BOT_TOKEN: 123:sometoken
+          DB_USERNAME: admin
+          DB_PASSWORD: 1234
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: testing
+        run: |
+          pytest
