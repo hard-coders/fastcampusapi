@@ -53,3 +53,11 @@ jobs:
           DB_NAME: testing
         run: |
           pytest
+          zip -r9 report.zip htmlcov/
+
+      # 테스트 결과
+      - uses: actions/upload-artifact@v2
+        name: Upload Artifact
+        with:
+          name: REPORT
+          path: report.zip
