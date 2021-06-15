@@ -1,0 +1,31 @@
+name: DEPLOY
+
+on:
+  workflow_run:
+    workflows: ["TEST"]
+    branches: [release]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: hardcoder.azurecr.io
+      IMAGE_NAME: quizbot
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY }}
+          username: ${{ secrets.AZURE_USERNAME }}
+          password: ${{ secrets.AZURE_PASSWORD }}
+      - run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} .
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
