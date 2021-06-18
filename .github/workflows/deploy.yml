@@ -41,9 +41,8 @@ jobs:
       - run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} .
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - uses: azure/webapps-deploy@v2
-        with:
-          app-name: fcquiz
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      # - uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: fcquiz
+      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
