@@ -42,14 +42,18 @@
             fetch('/v1/quizzes/form', {
                 method: 'POST',
                 body: form,
+                headers: {
+                    Authorization: token
+                }
             }).then(response => {
                 if (response.ok) {
                     alert('🎉 추가되었습니다!');
                     location.reload();
+                } else {
+                    throw new Error('network error');
                 }
-                throw new Error('network error');
             }).catch(error => {
-                console.log(error);
+                alert("🥵 실패했습니다..")
             });
         }
     </script>

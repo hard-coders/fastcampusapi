@@ -67,8 +67,7 @@ async def get_user(
     except ExpiredSignatureError:
         raise HTTPException(401, "Expired")
 
-    print(decoded_data)
-    db_user = db.query(models.User).filter(models.User == decoded_data.get("id")).first()
+    db_user = db.query(models.User).filter(models.User.id == decoded_data.get("id")).first()
     if not db_user:
         raise HTTPException(401, "Not registred")
 

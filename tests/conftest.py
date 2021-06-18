@@ -4,6 +4,7 @@ from httpx import AsyncClient
 from app import main, models
 from app.database import engine, get_db
 from app.config import settings
+from app.api import deps
 
 
 @pytest.fixture(scope="session")
@@ -30,7 +31,12 @@ async def default_client(app):
 
 
 @pytest.fixture
-async def client(app):
+async def client(app, add_user):
+    async def mock_get_user():
+        return add_user()
+
+    app.dependency_overrides[deps.get_user] = mock_get_user
+
     async with AsyncClient(app=app, base_url="http://test/v1") as ac:
         models.Base.metadata.drop_all(bind=engine)
         models.Base.metadata.create_all(bind=engine)
@@ -38,12 +44,18 @@ async def client(app):
 
 
 @pytest.fixture
-def user(session) -> models.User:
-    row = models.User(username="fc2021", first_name="fast", last_name="campus")
-    session.add(row)
-    session.commit()
+def add_user(session):
+    def func(username: str = None, first_name: str = None, last_name: str = None):
+        row = models.User(
+            username=username or "fc2021",
+            first_name=first_name or "fast",
+            last_name=last_name or "campus",
+        )
+        session.add(row)
+        session.commit()
+        return row
 
-    return row
+    return func
 
 
 @pytest.fixture

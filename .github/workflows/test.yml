@@ -2,6 +2,9 @@ name: TEST
 
 on: [push]
 
+env:
+  APP_ENV: test
+
 jobs:
   test:
     runs-on: ubuntu-latest

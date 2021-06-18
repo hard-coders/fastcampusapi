@@ -9,7 +9,8 @@ async def test_get_empty_user(client):
 
 
 @pytest.mark.asyncio
-async def test_get_user(client, user):
+async def test_get_user(client, add_user):
+    user = add_user()
     r = await client.get("/users")
     data = r.json()
 
