@@ -4,20 +4,39 @@
 <head>
     <title>QuizBot</title>
     <link href="style.css" rel="stylesheet">
+    <script src="jwt-decode.js"></script>
 </head>
 
 <body>
-    <div class="theme">
-        <h1>🆀 퀴즈 문제 만들기</h1>
-        <form method="post" action="#" id="quiz">
-            <input type="text" name="question" placeholder="문제" required="required" />
-            <textarea name="content" placeholder="1️. 보기&#10;2️. 보기&#10;3️. 보기&#10;4️. 보기" rows=6
-                required="required"></textarea>
-            <input type="number" name="answer" placeholder="정답" min="1" required="required" />
-            <button type="submit" class="btn btn-primary btn-block btn-large" onclick="submitData()">만들기</button>
-        </form>
-    </div>
+    <nav>
+        <div>
+            <ul>
+                <li><img src="#" alt="avatar" id="avatar"></li>
+                <li id="username"></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="theme">
+            <h1>🆀 퀴즈 문제 만들기</h1>
+            <form action="#" id="quiz">
+                <input type="text" name="question" placeholder="문제" required="required" />
+                <textarea name="content" placeholder="1️. 보기&#10;2️. 보기&#10;3️. 보기&#10;4️. 보기" rows=6
+                    required="required"></textarea>
+                <input type="number" name="answer" placeholder="정답" min="1" required="required" />
+                <button type="submit" class="btn btn-primary btn-block btn-large" onclick="submitData()">만들기</button>
+            </form>
+        </div>
+    </main>
     <script>
+        let token = sessionStorage.getItem("token");
+        let user = jwt_decode(token)
+
+        let username = document.getElementById('username');
+        let avatar = document.getElementById('avatar');
+        username.innerHTML = user.username;
+        avatar.src = user.photo_url;
+
         function submitData(question, content, answer) {
             let form = new FormData(document.getElementById('quiz'));
             fetch('/v1/quizzes/form', {
@@ -25,6 +44,7 @@
                 body: form,
             }).then(response => {
                 if (response.ok) {
+                    alert('🎉 추가되었습니다!');
                     location.reload();
                 }
                 throw new Error('network error');
