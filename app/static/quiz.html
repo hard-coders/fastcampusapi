@@ -1,0 +1,40 @@
+<!-- Source from: https://codepen.io/frytyler/pen/EGdtg -->
+<!-- tutorial/chapter_1-2/02_form_data.py 를 위한 파일입니다 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>QuizBot</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="theme">
+        <h1>🆀 퀴즈 문제 만들기</h1>
+        <form method="post" action="#" id="quiz">
+            <input type="text" name="question" placeholder="문제" required="required" />
+            <textarea name="content" placeholder="1️. 보기&#10;2️. 보기&#10;3️. 보기&#10;4️. 보기" rows=6
+                required="required"></textarea>
+            <input type="number" name="answer" placeholder="정답" min="1" required="required" />
+            <button type="submit" class="btn btn-primary btn-block btn-large" onclick="submitData()">만들기</button>
+        </form>
+    </div>
+    <script>
+        function submitData(question, content, answer) {
+            let form = new FormData(document.getElementById('quiz'));
+            fetch('/v1/quizzes/form', {
+                method: 'POST',
+                body: form,
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+                throw new Error('network error');
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

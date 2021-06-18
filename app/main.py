@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app import api
 
@@ -12,6 +13,7 @@ app.add_middleware(
     allow_methods={"OPTIONS", "GET", "POST"},
     allow_headers={"*"},
 )
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
 @app.on_event("startup")
