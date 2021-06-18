@@ -43,7 +43,7 @@
                 method: 'POST',
                 body: form,
                 headers: {
-                    Authorization: token
+                    Authorization: `Bearer ${token}`
                 }
             }).then(response => {
                 if (response.ok) {

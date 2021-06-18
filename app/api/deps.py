@@ -55,7 +55,7 @@ async def verify_telegram_login(auth: AuthTelegram) -> str:
 
     if hmac.compare_digest(h.hexdigest(), hash_):
         return await create_access_token(auth)
-    raise HTTPException(401)
+    raise HTTPException(401, "Failed to verify Telegram")
 
 
 async def get_user(
