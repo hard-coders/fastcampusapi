@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
+    SECRET_KEY: SecretStr
     TELEGRAM_BOT_TOKEN: SecretStr
 
     TESTING = False
@@ -27,6 +28,7 @@ class TestSettings(BaseSettings):
     DB_PORT = 3306
     DB_NAME = "testing"
 
+    SECRET_KEY: SecretStr = "secret"
     TELEGRAM_BOT_TOKEN: SecretStr = "secret"
 
     TESTING = True

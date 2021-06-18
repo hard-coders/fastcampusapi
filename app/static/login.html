@@ -14,8 +14,20 @@
     </div>
     <script type="text/javascript">
         function onTelegramAuth(user) {
-            alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' +
-                user.username : '') + ')');
+            fetch('/v1/auth', {
+                method: 'POST',
+                body: JSON.stringify(user),
+            }).then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error('network error');
+            }).then(data => {
+                sessionStorage.setItem("token", data.token);
+                location.replace("/static/quiz.html")
+            }).catch(error => {
+                console.log(error);
+            });
         }
     </script>
 </body>
